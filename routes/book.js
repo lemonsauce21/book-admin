@@ -11,5 +11,8 @@ router.get('/', function(req, res, next) {
 /* view : 책 목록리스트 */
 router.get('/list', bookController.view.list);
 
+/* api */
+router.get('/api/list', bookController.api.list);
+
 module.exports = router;
 

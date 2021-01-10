@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -23,6 +24,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/book', bookRouter)
+
+/* DB setting */
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect('mongodb://localhost:27017/book-admin');
+
+var db = mongoose.connection;
+db.once('open', function(){
+  console.log('DB connected');
+});
+db.on('error', function(err){
+  console.log('DB connected ERROR : ', err);
+  //mongoose.connect(conf.mongodb);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

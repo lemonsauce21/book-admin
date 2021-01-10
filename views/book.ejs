@@ -19,7 +19,6 @@
   </head>
 
   <body>
-
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -48,52 +47,8 @@
           </ul>
         </div>
 
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">도서 목록</h1>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
-                </tr>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <div id="book-admin-content"></div>
+
       </div>
     </div>
 
@@ -105,5 +60,21 @@
     <script src="/js/assets/docs.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/js/assets/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- 파일 늘어나면 걸프분리 -->
+    <script src="/script/base.js"></script>
+    <script src="/script/book.js"></script>
+    <script>
+      var bookContainer = {};
+      $(document).ready(function(){
+        bookContainer = new BookContainer('book-admin-content');
+        bookContainer.initialize().then(function(book){
+          return book.render();
+        }).catch(function(error){
+          console.error(error);
+        });
+        //만든 후 작업.
+      });
+    </script>
   </body>
 </html>
