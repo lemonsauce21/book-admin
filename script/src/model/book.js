@@ -6,9 +6,8 @@ class BookContainer extends BookAdminBase{
       this.target = {
         self : $(`#${parentId}`),
         book : {
-          self : {},
-          list : {}
-          //나중에 검색부분
+          self: '',
+          list: ''
         }
       };
 
@@ -37,39 +36,12 @@ class BookContainer extends BookAdminBase{
                     <th>저자</th>
                     <th>출판사</th>
                     <th>카테고리</th>
-                    <th>종이책 정가</th>
+                    <th>전자책 정가</th>
                     <th>판매가</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>1,001</td>
-                    <td>Lorem</td>
-                    <td>ipsum</td>
-                    <td>dolor</td>
-                    <td>sit</td>
-                  </tr>
-                  <tr>
-                    <td>1,002</td>
-                    <td>amet</td>
-                    <td>consectetur</td>
-                    <td>adipiscing</td>
-                    <td>elit</td>
-                  </tr>
-                  <tr>
-                    <td>1,003</td>
-                    <td>Integer</td>
-                    <td>nec</td>
-                    <td>odio</td>
-                    <td>Praesent</td>
-                  </tr>
-                  <tr>
-                    <td>1,003</td>
-                    <td>libero</td>
-                    <td>Sed</td>
-                    <td>cursus</td>
-                    <td>ante</td>
-                  </tr>
+                <tbody id="${this.id.book.list}">
+                  <div ></div>
                 </tbody>
               </table>
             </div>
@@ -86,7 +58,7 @@ class BookContainer extends BookAdminBase{
 
   async initialize(){
     try{
-      this.getBookList();
+      await this.getBookList();
 
       super.initialize();
       return this;
@@ -98,6 +70,9 @@ class BookContainer extends BookAdminBase{
   async render(){
     try{
       this.bind();
+
+      this.renderBookList();
+
       super.render();
       return this;
     }catch(error){
@@ -106,15 +81,41 @@ class BookContainer extends BookAdminBase{
   }
 
 
-  renderBookList(){
-    let target = $(`#${this.target.book.list}`);
-    let bookList = this.view.bookList;
-
-  }
-
   getBookList(){
-    this.view.bookList = "contentcontent";
+    return new Promise((resolve) => {
+      BookService.getBookList((result) => {
+        this.view.bookList = result.data.bookList;
+
+        resolve(this);
+      })
+    })
   }
+
+
+  renderBookList(){
+    let bookList = this.view.bookList;
+    let listHtml = `
+      ${bookList.reduce((previous, current, currentIndex) => {
+        return `
+          ${currentIndex > 0 ? previous : ''}
+            <tr>
+              <td>#</td>
+              <td>${current.title}</td>
+              <td>${current.author}</td>
+              <td>${current.publisher}</td>
+              <td>${current.category1}, ${current.category2}</td>
+              <td>${current.price_ebook}</td>
+              <td>${current.price_sale}</td>
+            </tr>  
+        `
+      }, bookList)}
+    `;
+
+    this.target.book.list = this.target.self.find($(`#${this.id.book.list}`));
+    console.log(this.target.book.list);
+    this.target.book.list.html(listHtml);
+  }
+
 
 
 }

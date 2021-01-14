@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const bookSchema = require('../model/book');
-//스키아
+const _ = require('lodash');
 
 class BookService{
   static getBookList(callback){
