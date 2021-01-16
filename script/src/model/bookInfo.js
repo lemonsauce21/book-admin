@@ -87,12 +87,73 @@ class bookInfo extends BookAdminBase{
             </div>
           </div>
         `);
+        
+        this.target.self.off();
+
+        //저장 눌렀을 때 신규, 수정 분기
+        this.target.self.on('click', `#${this.id.save}`, (event) => {
+          if(_.isUndefined(this.view.bookInfo._id)) {
+            this.insertBook();
+          }
+          else {
+            this.updateBook();
+          }
+        });
       };
 
     }catch(error){
       throw new Error(error)
     }
   };
+
+  /**
+   * 신규
+   */
+  insertBook(){
+    BookService.insertBook(this.setInfo(), (result) => {
+      if(!_.isUndefined(result.status) && result.status === 200){
+        alert("정상 처리되었습니다.");
+        window.location.reload();
+        return false;
+      }else{
+        alert(`정보 입력에 실패하였습니다.[${result}]`);
+      }
+    });
+  }
+
+  /**
+   * 수정
+   */
+  updateBook(){
+    BookService.updateBook(this.view.bookInfo._id, this.setInfo(), (result) => {
+      if(!_.isUndefined(result.status) && result.status === 200){
+        alert("정상 처리되었습니다.");
+        window.location.reload();
+        return false;
+      }else{
+        alert(`정보 수정에 실패하였습니다.(${result})`);
+      }
+    });
+  };
+
+  setInfo(){
+    let jsonData = {
+      title : $(`#${this.id.bookInfo.title}`).val(),
+      author : $(`#${this.id.bookInfo.author}`).val(),
+      publisher : $(`#${this.id.bookInfo.publisher}`).val(),
+      category1 : $(`#${this.id.bookInfo.category1}`).val(),
+      category2 : $(`#${this.id.bookInfo.category2}`).val(),
+      image_url : $(`#${this.id.bookInfo.image_url}`).val(),
+      price_paper : $(`#${this.id.bookInfo.price_paper}`).val(),
+      price_ebook : $(`#${this.id.bookInfo.price_ebook}`).val(),
+      price_sale : $(`#${this.id.bookInfo.price_sale}`).val(),
+      discount_paper : _.isEmpty($(`#${this.id.bookInfo.discount_paper}`).val()) ? 0 : $(`#${this.id.bookInfo.discount_paper}`).val(),
+      discount_ebook : _.isEmpty($(`#${this.id.bookInfo.discount_ebook}`).val()) ? 0 : $(`#${this.id.bookInfo.discount_ebook}`).val(),
+      discount_sale : _.isEmpty($(`#${this.id.bookInfo.discount_sale}`).val()) ? 0 : $(`#${this.id.bookInfo.discount_sale}`).val()
+    };
+
+    return jsonData;
+  }
 
   async initialize(info){
     try{

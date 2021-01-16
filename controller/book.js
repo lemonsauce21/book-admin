@@ -2,6 +2,7 @@
 
 const ResultMessage = require('../lib/resultMessage');
 const BookService = require('../service/bookService');
+let _ = require('lodash');
 
 const view = {
     list : (req, res) => {
@@ -25,7 +26,34 @@ const api = {
                 }));
             }
         })
+    },
+    update: (req, res) => {
+        let _id = req.params._id.trim();
+        let params = req.body;
+        console.log(params);
+
+        if (_.isUndefined(_id) || _.isEmpty(_id)) {
+            res.send(ResultMessage.BadRequest(`The "_id" Parameter Is Incorrect`));
+            return false;
+        };
+
+        if (_.isUndefined(params) || _.isEmpty(params)) {
+            res.send(ResultMessage.BadRequest(`The "params" Parameter Is Incorrect`));
+            return false;
+        };
+
+        BookService.updateBook(_id, params, (err, cb) => {
+            if (err) {
+                console.log(err);
+
+                res.status(500);
+                res.json(ResultMessage.ServerError());
+            } else {
+                res.json(ResultMessage.Success(cb));
+            }
+        });
     }
+
     /*list
     create
     delete
@@ -37,6 +65,7 @@ module.exports = {
         list : view.list
     },
     api : {
-        list : api.list
+        list : api.list,
+        update : api.update
     }
 };
