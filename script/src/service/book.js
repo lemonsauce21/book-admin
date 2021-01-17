@@ -14,7 +14,7 @@ class BookService{
   }
 
 
-/*  static insertBook(jsonData, callback){
+  static insertBook(jsonData, callback){
     let httpService = new HttpService('/book/api/', jsonData);
 
     httpService.event.failed = (error) => {
@@ -26,7 +26,8 @@ class BookService{
     };
 
     httpService.postData();
-  }*/
+  }
+
 
   static updateBook(id, jsonData, callback){
     let httpService = new HttpService(`/book/api/${id}`, jsonData);

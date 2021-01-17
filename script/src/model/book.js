@@ -55,8 +55,10 @@ class BookContainer extends BookAdminBase{
                   <div ></div>
                 </tbody>
               </table>
+              <button type="button" class="btn btn-sm btn-success pull-right" id="${this.id.book.info}-new"><span class="bold">새 도서</span></button>
             </div>
           </div>
+          
           <div class="modal fade bd-example-modal-lg" id="${this.id.modal.bookInfo.self}" tabindex='-1'></div>
         `);
       };
@@ -130,7 +132,7 @@ class BookContainer extends BookAdminBase{
     this.target.self.on('click', `[id^="${this.id.book.info}"]`, async (event) => {
       let _id = event.currentTarget.id.replace(`${this.id.book.info}-`, "");
       this.view.bookInfo = _.filter(this.view.bookList, (item)=>{ return item._id === _id });
-      console.log(this.view.bookInfo);
+
       //상세정보세팅
       this.model.bookInfo = new bookInfo(this.id.modal.bookInfo.self);
       await this.model.bookInfo.initialize(this.view.bookInfo[0]);
@@ -139,7 +141,5 @@ class BookContainer extends BookAdminBase{
       $(`#${this.id.modal.bookInfo.self}`).modal("show");
     });
   }
-
-
 
 }

@@ -32,7 +32,20 @@ class bookInfo extends BookAdminBase{
       };
 
       this.view = {
-        bookInfo : {}
+        bookInfo : {
+          title : '',
+          author : '',
+          publisher : '',
+          category1 : '',
+          category2 : '',
+          image_url : '',
+          price_paper : '',
+          price_ebook : '',
+          price_sale : '',
+          discount_paper : '0',
+          discount_ebook : '0',
+          discount_sale : '0'
+        }
       };
 
       this.bind = () => {
@@ -80,8 +93,8 @@ class bookInfo extends BookAdminBase{
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-white"  data-dismiss="modal"><i class="fa fa-upload"></i><span class="bold"> CLOSE</span></button>
-                  <button type="button" class="btn btn-sm btn-info" id="${this.id.save}"><i class="fa fa-upload"></i><span class="bold"> SAVE</span></button>
+                  <button type="button" class="btn btn-sm btn-white"  data-dismiss="modal"><i class="fa fa-upload"></i><span class="bold">닫기</span></button>
+                  <button type="button" class="btn btn-sm btn-info" id="${this.id.save}"><i class="fa fa-upload"></i><span class="bold">저장</span></button>
                 </div>
               </div>
             </div>
@@ -90,7 +103,7 @@ class bookInfo extends BookAdminBase{
         
         this.target.self.off();
 
-        //저장 눌렀을 때 신규, 수정 분기
+        //저장 클릭 : 신규, 수정 분기
         this.target.self.on('click', `#${this.id.save}`, (event) => {
           if(_.isUndefined(this.view.bookInfo._id)) {
             this.insertBook();
@@ -106,6 +119,31 @@ class bookInfo extends BookAdminBase{
     }
   };
 
+
+  async initialize(info){
+    try{
+      if(!_.isUndefined(info)){
+        this.view.bookInfo = info;
+      }
+
+      super.initialize();
+      return this;
+    }catch(error){
+      throw new Error(error)
+    }
+  }
+
+  async render(){
+    try{
+      this.bind();
+      super.render();
+      return this;
+    }catch(error){
+      throw new Error(error)
+    }
+  }
+
+
   /**
    * 신규
    */
@@ -120,6 +158,7 @@ class bookInfo extends BookAdminBase{
       }
     });
   }
+
 
   /**
    * 수정
@@ -151,29 +190,7 @@ class bookInfo extends BookAdminBase{
       discount_ebook : _.isEmpty($(`#${this.id.bookInfo.discount_ebook}`).val()) ? 0 : $(`#${this.id.bookInfo.discount_ebook}`).val(),
       discount_sale : _.isEmpty($(`#${this.id.bookInfo.discount_sale}`).val()) ? 0 : $(`#${this.id.bookInfo.discount_sale}`).val()
     };
-
     return jsonData;
   }
-
-  async initialize(info){
-    try{
-      this.view.bookInfo = info;
-      super.initialize();
-      return this;
-    }catch(error){
-      throw new Error(error)
-    }
-  }
-
-  async render(){
-    try{
-      this.bind();
-      super.render();
-      return this;
-    }catch(error){
-      throw new Error(error)
-    }
-  }
-
 
 }

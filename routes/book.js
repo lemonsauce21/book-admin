@@ -19,7 +19,7 @@ router.get('/api/list', bookController.api.list);
 router.put('/api/:_id', bookController.api.update);
 
 //도서 정보 생성
-//router.post('/api/', bookController.api.create);
+router.post('/api/', bookController.api.create);
 
 
 module.exports = router;

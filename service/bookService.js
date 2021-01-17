@@ -14,10 +14,7 @@ class BookService{
     });
   }
 
-  static updateBook(_id, params, cb) {
-    console.log("service in" + _id);
-    console.log(params);
-
+  static updateBook(_id, params, callback) {
     let query = bookSchema.updateOne(
       {
         _id: new ObjectId(_id)
@@ -27,9 +24,17 @@ class BookService{
       }
     );
     query.exec((err, result) => {
-      cb(err, result);
+      callback(err, result);
     });
   }
+
+
+  static insertBook(params, callback) {
+    let query = new bookSchema(params);
+    query.save((err, result) => {
+      callback(err, result);
+    });
+  };
 
 }
 
