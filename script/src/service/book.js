@@ -44,6 +44,22 @@ class BookService{
     httpService.putData();
   }
 
+
+  static deleteBook(id, callback){
+    let httpService = new HttpService(`/book/api/${id}`);
+
+    httpService.event.failed = (error) => {
+      console.log(error.toString());
+      callback(error);
+    };
+
+    httpService.event.succeeded = (result) => {
+      callback(result);
+    };
+
+    httpService.deleteData();
+  }
+
 }
 
 

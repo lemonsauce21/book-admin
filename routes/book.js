@@ -18,9 +18,11 @@ router.get('/api/list', bookController.api.list);
 //도서 정보 수정
 router.put('/api/:_id', bookController.api.update);
 
+//도서 정보 삭제
+router.delete('/api/:_id', bookController.api.destroy);
+
 //도서 정보 생성
 router.post('/api/', bookController.api.create);
-
 
 module.exports = router;
 

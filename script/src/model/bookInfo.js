@@ -91,8 +91,13 @@ class bookInfo extends BookAdminBase{
                   <div class="form-group">
                     <label>판매가 할인률</label><input type="text" class="form-control" id="${this.id.bookInfo.discount_sale}" value="${this.view.bookInfo.discount_sale}">
                   </div>
+                  <div class="form-group">
+                    <label>도서 이미지주소</label><input type="text" class="form-control" id="${this.id.bookInfo.image_url}" value="${this.view.bookInfo.image_url}">
+                    ${!_.isUndefined(this.view.bookInfo._id) && !_.isUndefined(this.view.bookInfo.image_url) ? `<img src="${this.view.bookInfo.image_url}" />` : ''}
+                  </div>                  
                 </div>
                 <div class="modal-footer">
+                  ${!_.isUndefined(this.view.bookInfo._id) ? `<button type="button" class="btn btn-sm btn-danger pull-left" id="${this.id.delete}"><span class="bold">삭제</span></button>` : ''}
                   <button type="button" class="btn btn-sm btn-white"  data-dismiss="modal"><i class="fa fa-upload"></i><span class="bold">닫기</span></button>
                   <button type="button" class="btn btn-sm btn-info" id="${this.id.save}"><i class="fa fa-upload"></i><span class="bold">저장</span></button>
                 </div>
@@ -107,9 +112,21 @@ class bookInfo extends BookAdminBase{
         this.target.self.on('click', `#${this.id.save}`, (event) => {
           if(_.isUndefined(this.view.bookInfo._id)) {
             this.insertBook();
-          }
-          else {
+          }else{
             this.updateBook();
+          }
+        });
+
+        this.target.self.on('click', `#${this.id.delete}`, (event) => {
+          if(!confirm("정말로 도서 정보를 삭제하시겠습니까?")){
+            return false;
+          }
+
+          if(!_.isUndefined(this.view.bookInfo._id)) {
+            this.deleteBook();
+          }else{
+            alert("도서 정보가 올바르지 않습니다.");
+            return false;
           }
         });
       };
@@ -132,6 +149,7 @@ class bookInfo extends BookAdminBase{
       throw new Error(error)
     }
   }
+
 
   async render(){
     try{
@@ -174,6 +192,23 @@ class bookInfo extends BookAdminBase{
       }
     });
   };
+
+
+  /**
+   * 삭제
+   */
+  deleteBook(){
+    BookService.deleteBook(this.view.bookInfo._id, (result) => {
+      if(!_.isUndefined(result.status) && result.status === 200){
+        alert("정상 처리되었습니다.");
+        window.location.reload();
+        return false;
+      }else{
+        alert(`정보 수정에 실패하였습니다.(${result})`);
+      }
+    });
+  };
+
 
   setInfo(){
     let jsonData = {

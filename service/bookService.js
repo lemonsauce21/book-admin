@@ -28,13 +28,24 @@ class BookService{
     });
   }
 
-
   static insertBook(params, callback) {
     let query = new bookSchema(params);
     query.save((err, result) => {
       callback(err, result);
     });
   };
+
+  static deleteBook(params, callback) {
+    let query = bookSchema.deleteOne(
+      {
+        _id: params._id
+      }
+    );
+
+    query.exec((err, result) => {
+      callback(err, result);
+    });
+  }
 
 }
 

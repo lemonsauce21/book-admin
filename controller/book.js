@@ -31,23 +31,23 @@ const api = {
     let _id = req.params._id.trim();
     let params = req.body;
 
-    if (_.isUndefined(_id) || _.isEmpty(_id)) {
+    if(_.isUndefined(_id) || _.isEmpty(_id)){
       res.send(ResultMessage.BadRequest(`The "_id" Parameter Is Incorrect`));
       return false;
     };
 
-    if (_.isUndefined(params) || _.isEmpty(params)) {
+    if(_.isUndefined(params) || _.isEmpty(params)){
       res.send(ResultMessage.BadRequest(`The "params" Parameter Is Incorrect`));
-    return false;
+      return false;
     };
 
     BookService.updateBook(_id, params, (err, cb) => {
-      if (err) {
+      if(err){
         console.log(err);
 
         res.status(500);
         res.json(ResultMessage.ServerError());
-      } else {
+      }else{
         res.json(ResultMessage.Success(cb));
       }
     });
@@ -56,12 +56,35 @@ const api = {
     let params = req.body;
 
     BookService.insertBook(params, (err, cb) => {
-      if (err) {
+      if(err){
         console.log(err);
 
         res.status(500);
         res.json(ResultMessage.ServerError());
-      } else {
+      }else{
+        res.json(ResultMessage.Success(cb));
+      }
+    });
+  },
+  destroy : (req, res) => {
+    let _id = req.params._id.trim();
+
+    if(_.isUndefined(_id) || _.isEmpty(_id)){
+      res.send(ResultMessage.BadRequest(`The "_id" Parameter Is Incorrect`));
+      return false;
+    };
+
+    let params = {
+      _id : _id
+    }
+
+    BookService.deleteBook(params, (err, cb) => {
+      if(err){
+        console.log(err);
+
+        res.status(500);
+        res.json(ResultMessage.ServerError());
+      }else{
         res.json(ResultMessage.Success(cb));
       }
     });
@@ -73,8 +96,9 @@ module.exports = {
     list : view.list
   },
   api : {
-    list: api.list,
-    update: api.update,
-    create: api.create
+    list : api.list,
+    update : api.update,
+    create : api.create,
+    destroy : api.destroy
   }
 };
